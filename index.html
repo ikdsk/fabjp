@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flesh and Blood 非公式 日本語カード訳</title>
     <style>
         body {
@@ -66,8 +67,7 @@
         }
 
         .card .name {
-            font-size: 1.5em;
-            margin-bottom: 10px;
+            font-size: 1.2em;
         }
 
         .card .functional,
@@ -94,6 +94,15 @@
 
         .card .report a:hover {
             text-decoration: underline;
+        }
+
+        @media only screen and (max-width: 600px) {
+
+            #searchBox,
+            #results {
+                width: 90%;
+                max-width: none;
+            }
         }
     </style>
 </head>
