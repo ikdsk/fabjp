@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flesh and Blood 非公式 日本語カード訳</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        #searchBox {
+            margin-top: 50px;
+            width: 50%;
+            max-width: 600px;
+            height: 30px;
+            font-size: 16px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #results {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card img {
+            height: 190.5px;
+            width: 136.5px;
+            margin-right: 20px;
+        }
+
+        .card img:hover {
+            height: 381px;
+            width: 273px;
+        }
+
+        .card .text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            padding-right: 20px;
+        }
+
+        .card p {
+            margin: 0;
+            padding: 10px;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+
+        .card .name {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .card .functional,
+        .card .japanese {
+            font-size: 0.9em;
+            width: 100%;
+        }
+
+        .card .functional {}
+
+        .card .japanese {
+            font-size: 0.8em;
+            color: #383838;
+            background-color: #e8e8e8;
+        }
+
+        .card .report {
+            align-self: flex-end;
+            margin-top: 10px;
+            font-size: 0.8em;
+        }
+
+        .card .report a {}
+
+        .card .report a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align:center">
+        <input id="searchBox" type="text" placeholder="検索..." onkeyup="search()">
+    </div>
+    <div id="results"></div>
+    <script>
+        let cards;
+
+        // Fetch cards.json file
+        fetch('cards.json')
+            .then(response => response.json())
+            .then(data => cards = data)
+            .catch((error) => console.error('Error:', error));
+        // Function to get the preferred ID for the card image
+        function getPreferredId(ids) {
+            const preferences = ['WTR', 'ARC', 'CRU', 'MON', 'ELE', 'EVR', '1HP', 'UPR', 'DYN', 'OUT', 'DTD'];
+            for (let i = 0; i < preferences.length; i++) {
+                for (let j = 0; j < ids.length; j++) {
+                    if (ids[j].includes(preferences[i])) {
+                        return ids[j];
+                    }
+                }
+            }
+            return ids[0]; // return the first id if no preference is found
+        }
+        // Function to format card text
+        function formatCardText(text) {
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        }
+
+
+        // Search function
+        function search() {
+            let input = document.getElementById('searchBox').value;
+            input = input.toLowerCase();
+            let output = document.getElementById('results');
+            output.innerHTML = '';
+            let count = 0;
+
+            if (input == "") {
+                return;
+            }
+
+            for (let i = 0; i < cards.length; i++) {
+                if (count >= 10)
+                    break;
+
+                if (cards[i].name.toLowerCase().includes(input) || cards[i].functional_text.toLowerCase().includes(input) || cards[i].japanese_text.toLowerCase().includes(input)) {
+                    count++;
+                    let preferredId = getPreferredId(cards[i].ids);
+                    let formattedFunctionalText = formatCardText(cards[i].functional_text);
+                    let formattedJapaneseText = formatCardText(cards[i].japanese_text);
+
+                    output.innerHTML += `
+                    <div class="card">
+                        <img src="https://json.fabrec.gg/cardmeta/cardfaces/${preferredId}.jpg" alt="${cards[i].name}" onerror="this.onerror=null; this.src='ph.png'">
+                        <div class="text">
+                            <p class="name">${cards[i].name}</p>
+                            <p class="functional">${formattedFunctionalText}</p>
+                            <p class="japanese"><strong>[自動翻訳]</strong> ${formattedJapaneseText}</p>
+                            <div class="report"><a href="https://docs.google.com/forms/d/e/1FAIpQLSctIkGGVT10bxwqdYWGgHfwG42J6oTRda6dp1OvQCA2AmIbCA/viewform?usp=pp_url&entry.1010258363=${cards[i].name}">誤訳を報告する</a></div>
+                        </div>
+                    </div>`;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
