@@ -11,7 +11,7 @@
         }
 
         #searchBox {
-            margin-top: 50px;
+            margin-top: 10px;
             width: 50%;
             max-width: 600px;
             height: 30px;
@@ -104,6 +104,17 @@
                 max-width: none;
             }
         }
+
+        .page_title {
+            font-size: large;
+        }
+
+        .page_description {
+            font-size: small;
+            color: darkslategrey;
+            text-align: center;
+            padding-top: 10px;
+        }
     </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -118,9 +129,16 @@
 
 <body>
     <div style="text-align:center">
+        <div class="page_title"><strong>Flesh and Blood</strong> 非公式 日本語カード検索</div>
         <input id="searchBox" type="text" placeholder="検索..." onkeyup="search()">
     </div>
-    <div id="results"></div>
+    <div id="results">
+        <div class="page_description">
+            <p>Flesh and Bloodのカード名で検索できます。</p>
+            日本語テキストは基本的に自動翻訳されたものなので、正確じゃなかったり、テキストのスタイルが一定でない場合があります。
+            問題を見つけたら「誤訳を報告する」リンクから報告していただけるとありがたいです。
+        </div>
+    </div>
     <script>
         let cards;
 
